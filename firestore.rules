@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /rooms/{roomId} {
+      allow read: if true;
+      allow create: if isValidRoomCreate(roomId);
+      allow update: if isValidRoomUpdate(roomId);
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidRoomCreate(roomId) {
+      return roomId.matches('^[A-Z]{4}$') &&
+             incoming().id == roomId &&
+             incoming().hostId is string &&
+             incoming().status == 'lobby' &&
+             incoming().currentRound == 1 &&
+             incoming().players is list &&
+             incoming().players.size() == 1 &&
+             incoming().messages is list &&
+             incoming().lastActive is int;
+    }
+
+    function isValidRoomUpdate(roomId) {
+      return incoming().id == roomId &&
+             incoming().players is list &&
+             incoming().players.size() >= 1 &&
+             incoming().players.size() <= 10 &&
+             incoming().messages is list &&
+             incoming().lastActive is int &&
+             (incoming().status in ['lobby', 'playing', 'voting', 'elimination', 'winner_players', 'winner_impostor']);
+    }
+  }
+}

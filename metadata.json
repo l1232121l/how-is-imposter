@@ -1,0 +1,6 @@
+{
+  "name": "מי המתחזה",
+  "description": "משחק חברתי ואינטראקטיבי שבו שחקנים מנסים לגלות מי המתחזה שלא קיבל את המילה הסודית, כולל תמיכה בבוטים חכמים.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "Room": {
+      "title": "Room",
+      "description": "A game room containing players, status, secret words, and game state.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique 4-letter room code" },
+        "hostId": { "type": "string", "description": "The playerId of the host" },
+        "status": { "type": "string", "enum": ["lobby", "playing", "voting", "elimination", "winner_players", "winner_impostor"] },
+        "secretWord": { "type": "string" },
+        "category": { "type": "string" },
+        "impostorId": { "type": "string" },
+        "players": { "type": "array" },
+        "currentRound": { "type": "number" },
+        "messages": { "type": "array" },
+        "lastActive": { "type": "number" },
+        "revealedPlayerName": { "type": "string" },
+        "revealedPlayerIsImpostor": { "type": "boolean" }
+      },
+      "required": ["id", "hostId", "status", "secretWord", "category", "impostorId", "players", "currentRound", "messages", "lastActive"]
+    }
+  },
+  "firestore": {
+    "/rooms/{roomId}": {
+      "schema": "Room",
+      "description": "Active game room"
+    }
+  }
+}
